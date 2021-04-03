@@ -1,0 +1,19 @@
+{
+  "name": "botanic-zoo-api",
+  "version": "0.0.1",
+  "description": "Animals and plants API ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "animals",
+    "plants",
+    "botanic"
+  ],
+  "author": "kevinchrist20",
+  "license": "MIT",
+  "dependencies": {
+    "jssoup": "0.0.12"
+  }
+}

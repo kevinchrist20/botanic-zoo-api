@@ -2,8 +2,10 @@
   "name": "botanic-zoo-api",
   "version": "0.0.1",
   "description": "Animals and Plants API ",
-  "main": "index.js",
+  "main": "./src/index.js",
   "scripts": {
+    "dev": "nodemon ./src/index.js",
+    "start": "node ./src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -15,6 +17,7 @@
   "license": "MIT",
   "dependencies": {
     "axios": "^0.21.1",
+    "cheerio": "^1.0.0-rc.6",
     "jssoup": "0.0.12"
   }
 }

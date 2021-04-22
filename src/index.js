@@ -2,9 +2,12 @@ let axios = require('axios')
 let cheerio = require('cheerio')
 let textVersion = require('textversionjs')
 
-// const animalUrl = 'https://animals.fandom.com/wiki/'
-const animalUrl = 'https://www.a-z-animals.com/animals/'
-const plantUrl = ''
+const ANIMAL_URL = 'https://www.a-z-animals.com/animals/'
+const PLANT_URL = ''
+
+const WHITE_SPACE_REGEX = /\s|(\(.*\))/g
+const UPPERCASE_REGEX = /(?=[A-Z])/
+const VIEW_ANIMAL_REGEX = /(view all .* <a.*?>(.*?)<\/a>)/ig
 
 var styleConfig = {
     linkProcess: function(_, linkText) {
@@ -18,65 +21,54 @@ var styleConfig = {
 var animal = {}
 
 axios
-    .get(animalUrl + "lion")
+    .get(ANIMAL_URL + "african bush elephant")
     .then(response => {
         let $ = cheerio.load(response.data)
         let factsBox = $('body').find('div.row.animal-facts-box')        
         let animalDetails = $('body').find('div#single-animal-text')
 
         var classification = $(factsBox).find('dl.row.animal-facts')
-        var locations = $(factsBox).children('.col-lg-6').next()
         var facts = $(factsBox).find('.col-lg-8 dl.row')
         var physical = $(factsBox).find('.col-lg-4 dl.row')
 
-        // $(facts).each((i, ele) => {
-        //     console.log($(ele).text())
-        // })
+        var featureKeys = []
+        var featureValues = []
+
+        // Classifications
+        $(classification).children().each((i, ele) => {
+            if($(ele).is('dt')) 
+                featureKeys.push($(ele).text().replace(WHITE_SPACE_REGEX, ''))
+            else 
+                featureValues.push($(ele).text())
+        })
 
         // Facts
         $(facts).find('.col-md-6 .row').children().each((i, ele) => {
-            var key = $(ele).filter('dt').text()
-            var value = $(ele).filter('dd').text()
-
-            animal[key] = value
+            if($(ele).is('dt')) 
+                featureKeys.push($(ele).text().replace(WHITE_SPACE_REGEX, ''))
+            else 
+                featureValues.push($(ele).text())
         })
 
         // Physical
         $(physical).children().each((i, ele) => {
-            var key = $(ele).filter('dt').text()
-            var value = $(ele).filter('dd')
-
-            if($(value).has('ul')) {
-                animal[key] = value
-                console.log(`${key} ${value}`)
+            if($(ele).is('dt')) 
+                featureKeys.push($(ele).text().replace(WHITE_SPACE_REGEX, ""))
+            else {
+                if($(ele).children().is('ul')) {
+                    var colorArray = $(ele).text().split(UPPERCASE_REGEX)
+                    featureValues.push(colorArray)
+                }
+                else featureValues.push($(ele).text())
             }
-            else 
-                animal[key] = value
         })
 
-        // Locations
-        $(locations).find('ul li').each((i, ele) => {
-            var location = $(ele).text()
-
-            animal['location'] = location
-        })
-
-        // Classifications
-        $(classification).children().each((i, ele) => {
-            var key = $(ele).filter('dt').text()
-            var value = $(ele).filter('dd').text()
-
-            animal[key] = value
-            // console.log(`${key} ${value}`)
-        })
-
-        var animalDetailsHTML = animalDetails.html().replace(/(view all .* <a.*?>(.*?)<\/a>)/ig, "")
+        var animalDetailsHTML = animalDetails.html().replace(VIEW_ANIMAL_REGEX, "")
         var detailsText = textVersion(animalDetailsHTML, styleConfig)
-        animal['description'] = detailsText
 
-        // console.log(detailsText)
-
+        featureKeys.forEach((value, idx) => {
+            animal[value] = featureValues[idx]
+        })
+        animal['Description'] = detailsText
+        console.log(animal)
     }).catch(err => console.log(err))
-
-
-    console.log(animal)

@@ -1,9 +1,19 @@
 let axios = require('axios')
 let cheerio = require('cheerio')
+let textVersion = require('textversionjs')
 
 // const animalUrl = 'https://animals.fandom.com/wiki/'
 const animalUrl = 'https://www.a-z-animals.com/animals/'
 const plantUrl = ''
+
+var styleConfig = {
+    linkProcess: function(_, linkText) {
+        return linkText
+    },
+    uIndentionChar: "*",
+    oIndentionChar: "-",
+	listIndentionTabs: 2
+}
 
 axios
     .get(animalUrl + "lion")
@@ -17,9 +27,10 @@ axios
         var facts = $(factsBox).find('.col-lg-8 dl.row')
         var physical = $(factsBox).find('.col-lg-4 dl.row')
 
-        $(animalDetails).each((i, ele) => {
-            console.log($(ele).text())
-        })
+
+        var animalDetailsHTML = animalDetails.html().replace(/(view all .* <a.*?>(.*?)<\/a>)/ig, "")
+        var detailsText = textVersion(animalDetailsHTML, styleConfig)
+        console.log(detailsText)
 
         // $(facts).each((i, ele) => {
         //     console.log($(ele).text())

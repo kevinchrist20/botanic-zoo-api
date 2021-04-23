@@ -25,7 +25,7 @@ const getAnimalRequest = async(name) => {
 
 
 
-export const getAnimal = async(name) => {
+const getAnimal = async(name) => {
     var animal = {}
     const data = getAnimalRequest(name)
 
@@ -80,6 +80,9 @@ export const getAnimal = async(name) => {
     return animal
 }
 
+module.exports = {
+    getAnimal
+}
 // axios
 //     .get(ANIMAL_URL + "african bush elephant")
 //     .then(response => {

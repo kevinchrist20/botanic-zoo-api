@@ -1,4 +1,5 @@
 # 🦁 Botanic Zoo API 🍓
+[![NPM](https://nodei.co/npm/botanic-zoo-api.png)](https://www.npmjs.com/package/botanic-zoo-api)
 
 Using Nodejs, Axios, and Cheerio, this app scrapes animal and plant facts from the web.
 
@@ -12,7 +13,9 @@ Using Nodejs, Axios, and Cheerio, this app scrapes animal and plant facts from t
 Botanic Zoo is free to use without cost.
 
 ## 📦 Installation
+```
 npm i botanic-zoo-api
+```
 
 ## 📝 Usage
 ```js

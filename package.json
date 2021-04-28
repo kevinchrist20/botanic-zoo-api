@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon ./src/index.js",
     "start": "node ./src/index.js",
-    "test": "mocha ./test/index.test.js --timeout 5000 && exit 1"
+    "test": "mocha ./test/index.test.js --timeout 10000 && exit 1"
   },
   "keywords": [
     "animals",

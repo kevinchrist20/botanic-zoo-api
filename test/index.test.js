@@ -7,6 +7,10 @@ describe('Get Animal Test', () => {
         return getAnimal('lion')
             .then(response => {
                 expect(typeof response).to.equal('object')
+
+                expect(response.Kingdom).to.equal('Animalia')
+                expect(response.Phylum).to.equal('Chordata')
+                expect(response.Class).to.equal('Mammalia')
             })
         })
     })

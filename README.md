@@ -20,7 +20,7 @@ npm i botanic-zoo-api
 ## 📝 Usage
 ```js
 const animal = require('botanic-zoo-api')
-animal
+animal.getAnimal('lion')
   .then(response => console.log(response))
   .catch(err => console.error(err))
 ```

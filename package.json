@@ -18,8 +18,6 @@
   "dependencies": {
     "axios": "^0.21.1",
     "cheerio": "^1.0.0-rc.6",
-    "express": "^4.17.1",
-    "jssoup": "0.0.12",
     "textversionjs": "^1.1.3"
   }
 }

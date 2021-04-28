@@ -1,22 +1,25 @@
-const express = require('express')
 let cheerio = require('cheerio')
+let axios = require('axios')
 let textVersion = require('textversionjs')
 
-let { WHITE_SPACE_REGEX, UPPERCASE_REGEX, VIEW_ANIMAL_REGEX, styleConfig } = require('./constant')
-let { getAnimal } = require('./api')
-
-let app = express()
-const PORT = process.env.PORT || 3000
-
-// Middlewares
-app.use(express.urlencoded({extended: false}))
-app.use(express.json())
+const { WHITE_SPACE_REGEX, UPPERCASE_REGEX, VIEW_ANIMAL_REGEX, styleConfig } = require('./constant')
+const { ANIMAL_URL, PLANT_URL } = require('./constant')
 
 
-app.get('/api/v1/animal', (req, res, next) => {
-    let animalName = req.query.name
+const getRequest = async(url) => {
+    let response
 
-    getAnimal(animalName)
+    try {
+        response = await axios(url)
+    } catch (error) {
+        throw Error(`Failed to fetch result from: ${url}`)
+    }
+
+    return response.data
+}
+
+async function getAnimal(name) {
+    return getRequest(ANIMAL_URL + name)
     .then(response => {
         let animal = {}
         let $ = cheerio.load(response)
@@ -67,15 +70,13 @@ app.get('/api/v1/animal', (req, res, next) => {
         })
         animal['Description'] = detailsText
 
-        res.status(200).json(animal)
+        return animal
     
-    })
-    .catch(err => {
-        res.status(400).json({
-            error: "Unable to fetch result"
-        })
+    }).catch(err => {
         console.error(err)
     })
-})
+}
 
-app.listen(PORT, console.log(`Listening to Port: ${PORT}`))
+module.exports = {
+    getAnimal
+}

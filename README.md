@@ -1,5 +1,4 @@
-![Botanic Zoo API](https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%3Fid%3DOIP.aMfBQaNog_5IAGuRmeN6bQHaFl%26pid%3DApi&f=1)
-# Botanic Zoo API
+# 🦁 Botanic Zoo API 🍓
 
 Using Nodejs, Axios, and Cheerio, this app scrapes animal and plant facts from the web.
 
@@ -12,6 +11,16 @@ Using Nodejs, Axios, and Cheerio, this app scrapes animal and plant facts from t
 ## 
 Botanic Zoo is free to use without cost.
 
+## 📦 Installation
+npm i botanic-zoo-api
 
-## Sites
-- ![AZ Animals](https://a-z-animals.com/)
+## 📝 Usage
+```js
+const animal = require('botanic-zoo-api')
+animal
+  .then(response => console.log(response))
+  .catch(err => console.error(err))
+```
+
+## Sites Used
+- [AZ Animals](https://a-z-animals.com/)

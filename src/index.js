@@ -8,8 +8,10 @@ const {
   VIEW_ANIMAL_REGEX,
   styleConfig,
   ANIMAL_URL_ROOT,
+  ANIMAL_URL,
+  PETS_ROUTES,
 } = require("./constant");
-const { ANIMAL_URL } = require("./constant");
+const { next } = require("cheerio/lib/api/traversing");
 
 const getRequest = async (url) => {
   let response;
@@ -29,7 +31,7 @@ async function getAnimal(name) {
       const animal = {};
       const $ = cheerio.load(response);
       const factsBox = $("body").find("div.row.animal-facts-box");
-      const animalDetails = $("body").find("div#single-animal-text"); 
+      const animalDetails = $("body").find("div#single-animal-text");
 
       const classification = $(factsBox).find("dl.row.animal-facts");
       const facts = $(factsBox).find(".col-lg-8 dl.row");
@@ -85,11 +87,12 @@ async function getAnimal(name) {
     })
     .catch((err) => {
       console.error(err);
+      return err;
     });
 }
 
 async function getAnimalOfTheDay() {
-  return getRequest(ANIMAL_URL)
+  return getRequest(ANIMAL_URL_ROOT)
     .then((response) => {
       const $ = cheerio.load(response);
       const contentSection = $("body").find("section#az_aod-2");
@@ -109,10 +112,75 @@ async function getAnimalOfTheDay() {
     })
     .catch((err) => {
       console.error(err);
+      return err;
+    });
+}
+
+async function getCatPets() {
+  return await getRequest(PETS_ROUTES.Cat)
+    .then((response) => {
+      const pet = {};
+      const characteristics = [];
+			const petsList = [];
+      const $ = cheerio.load(response);
+
+      const contentBody = $("body");
+      const petContent = contentBody.find("section#single-content");
+
+      const petInfo = petContent.find("p").first().text();
+      const petCharacteristics = petContent.find("ol");
+      const typeOfCoats = petContent.find("h3");
+      const pets = petContent.find("div.row");
+
+      const coats = [];
+      const coatsContent = [];
+      const coatTypes = {};
+      $(typeOfCoats).each((i, ele) => {
+        coats.push($(ele).text());
+        if ($(ele).next().is("p")) {
+          coatsContent.push($(ele).next().text());
+        }
+      });
+
+      $(petCharacteristics)
+        .find("li")
+        .each((i, ele) => {
+          characteristics.push($(ele).text());
+        });
+
+      $(pets)
+        .children()
+        .each((i, ele) => {
+					const cat = {};
+          if ($(ele).is("div.at-custom-content-ad")) {
+            return;
+          }
+					cat["Name"] = $(ele).find("h5.card-title").text();
+					cat["FunFact"] = $(ele).find("p.card-fun-fact").text();
+					cat["ImageUrl"] = $(ele).find("img").attr("src");
+					cat["AnimalUrl"] = $(ele).find("a").attr("href");
+					petsList.push(cat);
+        });
+
+      coats.forEach((coat, idx) => {
+        coatTypes[coat] = coatsContent[idx];
+      });
+
+      pet["Info"] = petInfo;
+      pet["Characteristics"] = characteristics;
+      pet["Coats"] = coatTypes;
+			pet["Pets"] = petsList;
+
+      return pet;
+    })
+    .catch((err) => {
+      console.error(err);
+      return err;
     });
 }
 
 module.exports = {
   getAnimal,
   getAnimalOfTheDay,
+  getCatPets,
 };

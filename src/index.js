@@ -11,7 +11,6 @@ const {
   ANIMAL_URL,
   PETS_ROUTES,
 } = require("./constant");
-const { next } = require("cheerio/lib/api/traversing");
 
 const getRequest = async (url) => {
   let response;
@@ -24,6 +23,44 @@ const getRequest = async (url) => {
 
   return response.data;
 };
+
+async function getPets(petUrl) {
+  return await getRequest(petUrl)
+    .then((response) => {
+      const pet = {};
+      const petsList = [];
+      const $ = cheerio.load(response);
+
+      const contentBody = $("body");
+      const petContent = contentBody.find("section#single-content");
+
+      const petInfo = petContent.find("p").first().text();
+      const pets = petContent.find("div.row");
+
+      $(pets)
+        .children()
+        .each((i, ele) => {
+          const petData = {};
+          if ($(ele).is("div.at-custom-content-ad")) {
+            return;
+          }
+          petData["Name"] = $(ele).find("h5.card-title").text();
+          petData["FunFact"] = $(ele).find("p.card-fun-fact").text();
+          petData["ImageUrl"] = $(ele).find("img").attr("src");
+          petData["AnimalUrl"] = $(ele).find("a").attr("href");
+          petsList.push(petData);
+        });
+
+      pet["Info"] = petInfo;
+      pet["Pets"] = petsList;
+
+      return pet;
+    })
+    .catch((err) => {
+      console.error(err);
+      return err;
+    });
+}
 
 async function getAnimal(name) {
   return getRequest(ANIMAL_URL + name)
@@ -117,70 +154,36 @@ async function getAnimalOfTheDay() {
 }
 
 async function getCatPets() {
-  return await getRequest(PETS_ROUTES.Cat)
-    .then((response) => {
-      const pet = {};
-      const characteristics = [];
-			const petsList = [];
-      const $ = cheerio.load(response);
+  return getPets(PETS_ROUTES.Cat);
+}
 
-      const contentBody = $("body");
-      const petContent = contentBody.find("section#single-content");
+async function getDogPets() {
+  return getPets(PETS_ROUTES.Dog);
+}
 
-      const petInfo = petContent.find("p").first().text();
-      const petCharacteristics = petContent.find("ol");
-      const typeOfCoats = petContent.find("h3");
-      const pets = petContent.find("div.row");
+async function getBirdPets() {
+  return getPets(PETS_ROUTES.Bird);
+}
 
-      const coats = [];
-      const coatsContent = [];
-      const coatTypes = {};
-      $(typeOfCoats).each((i, ele) => {
-        coats.push($(ele).text());
-        if ($(ele).next().is("p")) {
-          coatsContent.push($(ele).next().text());
-        }
-      });
+async function getFishPets() {
+  return getPets(PETS_ROUTES.Fish);
+}
 
-      $(petCharacteristics)
-        .find("li")
-        .each((i, ele) => {
-          characteristics.push($(ele).text());
-        });
+async function getRodentPets() {
+  return getPets(PETS_ROUTES.Rodent);
+}
 
-      $(pets)
-        .children()
-        .each((i, ele) => {
-					const cat = {};
-          if ($(ele).is("div.at-custom-content-ad")) {
-            return;
-          }
-					cat["Name"] = $(ele).find("h5.card-title").text();
-					cat["FunFact"] = $(ele).find("p.card-fun-fact").text();
-					cat["ImageUrl"] = $(ele).find("img").attr("src");
-					cat["AnimalUrl"] = $(ele).find("a").attr("href");
-					petsList.push(cat);
-        });
-
-      coats.forEach((coat, idx) => {
-        coatTypes[coat] = coatsContent[idx];
-      });
-
-      pet["Info"] = petInfo;
-      pet["Characteristics"] = characteristics;
-      pet["Coats"] = coatTypes;
-			pet["Pets"] = petsList;
-
-      return pet;
-    })
-    .catch((err) => {
-      console.error(err);
-      return err;
-    });
+async function getExoticPets() {
+  return getPets(PETS_ROUTES.Exotic);
 }
 
 module.exports = {
   getAnimal,
   getAnimalOfTheDay,
   getCatPets,
+  getDogPets,
+  getBirdPets,
+  getFishPets,
+  getRodentPets,
+  getExoticPets,
 };

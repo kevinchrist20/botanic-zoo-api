@@ -15,7 +15,11 @@
   "keywords": [
     "animals",
     "plants",
-    "botanic"
+    "botanic",
+    "zoo",
+    "api",
+    "animals-api",
+    "plants-api"
   ],
   "author": "kevinchrist20",
   "license": "MIT",

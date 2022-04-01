@@ -1,16 +1,21 @@
-const expect = require('chai').expect
+const expect = require("chai").expect;
 
-const getAnimal = require('../src/index').getAnimal
+const {getAnimal, getAnimalOfTheDay} = require("../src/index");
 
-describe('Get Animal Test', () => {
-    it('Get an animal by name', () => {
-        return getAnimal('lion')
-            .then(response => {
-                expect(typeof response).to.equal('object')
+describe("Get Animal Test", () => {
+  it("Get an animal by name", () => {
+    return getAnimal("lion").then((response) => {
+      expect(typeof response).to.equal("object");
 
-                expect(response.Kingdom).to.equal('Animalia')
-                expect(response.Phylum).to.equal('Chordata')
-                expect(response.Class).to.equal('Mammalia')
-            })
-        })
-    })
+      expect(response.Kingdom).to.equal("Animalia");
+      expect(response.Phylum).to.equal("Chordata");
+      expect(response.Class).to.equal("Mammalia");
+    });
+  });
+
+    it("Get animal of the day", () => {
+    return getAnimalOfTheDay().then((response) => {
+      expect(typeof response).to.equal("object");
+    });
+  })
+});

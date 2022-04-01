@@ -1,11 +1,12 @@
 # 🦁 Botanic Zoo API 🍓
 [![NPM](https://nodei.co/npm/botanic-zoo-api.png)](https://www.npmjs.com/package/botanic-zoo-api)
 
-Using Nodejs, Axios, and Cheerio, this app scrapes animal and plant facts from the web.
+Using Nodejs, Axios, and Cheerio, this library scrapes animal and plant facts from the web and produces a json object.
 
 ## Features
 - Get animal info and facts
 - Get list of pets(Dog, Cat, etc.)
+- Get animal & plant of the day
 - Get plant info and facts
 - Developer API
 

@@ -39,7 +39,23 @@ botanicZoo
   Order: 'Carnivora',
   Family: 'Eupleridae',
   Genus: 'Cryptoprocta',
-  Description: "Lorem ipsum donor",
+  ScientificName: 'Cryptoprocta ferox',
+  Prey: 'Lemurs, Frogs, Lizards',
+  NameOfYoung: 'Cub',
+  GroupBehavior: 'Solitary',
+  FunFact: 'Most closely related to the Mongoose!',
+  EstimatedPopulationSize: 'Less than 2,500',
+  BiggestThreat: 'Habitat loss',
+  MostDistinctiveFeature: 'Webbed toes and retractable claws',
+  GestationPeriod: '3 months',
+  Habitat: 'Dense tropical forest',
+  Predators: 'Human, Crocodile',
+  Diet: 'Carnivore',
+  Description: 'Fossa Classification and Evolution\n' +
+    '----------------------------------\n' +
+    '\n' +
+    'The Fossa is a medium-sized, carnivorous animal that is found exclusively on the island of Madagascar. The Fossa belongs to the Malagasy Carnivores group which are thought to have descended from Mongoose-like ancestors that arrived on Madagascar from Africa up to 24 million years ago. The Fossa is not only one of the most ancient of the eight species found on the island but it is also the largest, meaning that the Fossa is Madagascar’s largest mammalian predator. However, due to the cat-like appearance of the Fossa it was believed to be a primitive species of feline until recently. Sadly like a number of the unique animal species found in Madagascar today though, the Fossa is incredibly rare and is now considered to be endangered in its natural habitat primarily due to habitat loss.\n' +
+    '\n',
   ...
   }
  */
@@ -57,6 +73,7 @@ botanicZoo
   AnimalUrl: 'https://a-z-animals.com/animals/harris-hawk/'
   }
  */
+
 ```
 
 ## Sites Used

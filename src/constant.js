@@ -1,4 +1,5 @@
-const ANIMAL_URL = 'https://www.a-z-animals.com/animals/'
+const ANIMAL_URL_ROOT = "https://www.a-z-animals.com";
+const ANIMAL_URL = `${ANIMAL_URL_ROOT}/animals/`;
 const PLANT_URL = ''
 
 const WHITE_SPACE_REGEX = /\s|(\(.*\))/g
@@ -15,6 +16,7 @@ const styleConfig = {
 }
 
 module.exports = {
+    ANIMAL_URL_ROOT,
     ANIMAL_URL,
     PLANT_URL,
     WHITE_SPACE_REGEX,

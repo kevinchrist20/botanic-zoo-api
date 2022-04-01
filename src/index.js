@@ -8,8 +8,9 @@ const {
   VIEW_ANIMAL_REGEX,
   styleConfig,
   ANIMAL_URL_ROOT,
+  ANIMAL_URL,
+  PETS_ROUTES,
 } = require("./constant");
-const { ANIMAL_URL } = require("./constant");
 
 const getRequest = async (url) => {
   let response;
@@ -23,13 +24,51 @@ const getRequest = async (url) => {
   return response.data;
 };
 
+async function getPets(petUrl) {
+  return await getRequest(petUrl)
+    .then((response) => {
+      const pet = {};
+      const petsList = [];
+      const $ = cheerio.load(response);
+
+      const contentBody = $("body");
+      const petContent = contentBody.find("section#single-content");
+
+      const petInfo = petContent.find("p").first().text();
+      const pets = petContent.find("div.row");
+
+      $(pets)
+        .children()
+        .each((i, ele) => {
+          const petData = {};
+          if ($(ele).is("div.at-custom-content-ad")) {
+            return;
+          }
+          petData["Name"] = $(ele).find("h5.card-title").text();
+          petData["FunFact"] = $(ele).find("p.card-fun-fact").text();
+          petData["ImageUrl"] = $(ele).find("img").attr("src");
+          petData["AnimalUrl"] = $(ele).find("a").attr("href");
+          petsList.push(petData);
+        });
+
+      pet["Info"] = petInfo;
+      pet["Pets"] = petsList;
+
+      return pet;
+    })
+    .catch((err) => {
+      console.error(err);
+      return err;
+    });
+}
+
 async function getAnimal(name) {
   return getRequest(ANIMAL_URL + name)
     .then((response) => {
       const animal = {};
       const $ = cheerio.load(response);
       const factsBox = $("body").find("div.row.animal-facts-box");
-      const animalDetails = $("body").find("div#single-animal-text"); 
+      const animalDetails = $("body").find("div#single-animal-text");
 
       const classification = $(factsBox).find("dl.row.animal-facts");
       const facts = $(factsBox).find(".col-lg-8 dl.row");
@@ -85,11 +124,12 @@ async function getAnimal(name) {
     })
     .catch((err) => {
       console.error(err);
+      return err;
     });
 }
 
 async function getAnimalOfTheDay() {
-  return getRequest(ANIMAL_URL)
+  return getRequest(ANIMAL_URL_ROOT)
     .then((response) => {
       const $ = cheerio.load(response);
       const contentSection = $("body").find("section#az_aod-2");
@@ -109,10 +149,41 @@ async function getAnimalOfTheDay() {
     })
     .catch((err) => {
       console.error(err);
+      return err;
     });
+}
+
+async function getCatPets() {
+  return getPets(PETS_ROUTES.Cat);
+}
+
+async function getDogPets() {
+  return getPets(PETS_ROUTES.Dog);
+}
+
+async function getBirdPets() {
+  return getPets(PETS_ROUTES.Bird);
+}
+
+async function getFishPets() {
+  return getPets(PETS_ROUTES.Fish);
+}
+
+async function getRodentPets() {
+  return getPets(PETS_ROUTES.Rodent);
+}
+
+async function getExoticPets() {
+  return getPets(PETS_ROUTES.Exotic);
 }
 
 module.exports = {
   getAnimal,
   getAnimalOfTheDay,
+  getCatPets,
+  getDogPets,
+  getBirdPets,
+  getFishPets,
+  getRodentPets,
+  getExoticPets,
 };

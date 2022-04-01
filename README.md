@@ -15,6 +15,7 @@ Using Nodejs, Axios, and Cheerio, this library scrapes animal and plant facts fr
 ##
 
 Botanic Zoo is free to use without cost.
+Get info and list of different kinds of pets including dogs, cats, birds, rodents, exotic, and fish.
 
 ## 📦 Installation
 
@@ -52,12 +53,10 @@ botanicZoo
   Predators: 'Human, Crocodile',
   Diet: 'Carnivore',
   Description: 'Fossa Classification and Evolution\n' +
-    '----------------------------------\n' +
-    '\n' +
-    'The Fossa is a medium-sized, carnivorous animal that is found exclusively on the island of Madagascar. The Fossa belongs to the Malagasy Carnivores group which are thought to have descended from Mongoose-like ancestors that arrived on Madagascar from Africa up to 24 million years ago. The Fossa is not only one of the most ancient of the eight species found on the island but it is also the largest, meaning that the Fossa is Madagascar’s largest mammalian predator. However, due to the cat-like appearance of the Fossa it was believed to be a primitive species of feline until recently. Sadly like a number of the unique animal species found in Madagascar today though, the Fossa is incredibly rare and is now considered to be endangered in its natural habitat primarily due to habitat loss.\n' +
-    '\n',
-  ...
-  }
+    'The Fossa is a medium-sized, carnivorous animal that is found exclusively on the island of Madagascar. The Fossa belongs to the Malagasy Carnivores group which are thought 
+    to have descended from Mongoose-like ancestors that arrived on Madagascar from Africa up to 24 million years ago. \n',
+    ...
+}
  */
 
 botanicZoo
@@ -66,14 +65,32 @@ botanicZoo
   .catch((err) => console.error(err));
 
 /* Example output
- {
+{
   Name: 'Harris Hawk',
   FunFact: "Their vision is eight times better than a human's",
   ImageUrl: 'https://a-z-animals.com/media/2021/12/harris-hawk3-300x157.jpg',
   AnimalUrl: 'https://a-z-animals.com/animals/harris-hawk/'
-  }
+}
  */
 
+botanicZoo
+  .getCatPets()
+  .then((response) => console.log(response))
+  .catch((err) => console.error(err));
+
+/* Example output
+{
+  Info: "The domestic cat (Felis catus) is a small, typically furry, carnivorous mammal. They are often called house cats when kept as indoor pets or simply cats when there is no need to distinguish them from other felids and felines.",
+  Pets: [
+    {
+      Name: 'Harris Hawk',
+      FunFact: "Their vision is eight times better than a human's",
+      ImageUrl: 'https://a-z-animals.com/media/2021/12/harris-hawk3-300x157.jpg',
+      AnimalUrl: 'https://a-z-animals.com/animals/harris-hawk/'
+    }
+  ]
+}
+ */
 ```
 
 ## Sites Used
